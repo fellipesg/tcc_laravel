@@ -59,8 +59,10 @@ class FileController extends Controller
      */
     public function show(File $file)
     {
-        return response()->download(storage_path('app/public/logos/' . $file->filename));
+        $f = File::find($file->id);
+        return response()->download(storage_path('app/public/logos/' . $f->filename));
     }
+
     public function uploadFile(){
         return view('files.uploadfile');
     }
