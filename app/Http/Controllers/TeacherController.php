@@ -14,7 +14,8 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        //
+        $teachers = Teacher::all();
+        return view('teachers.index')->with('teachers', $teachers);
     }
 
     /**
@@ -24,7 +25,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        //
+        return View('teachers.create');
     }
 
     /**
@@ -35,7 +36,17 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome'=>'required',
+            'identificador'=> 'required'
+          ]);
+          $teacher = new Teacher([
+            'nome' => $request->get('nome'),
+            'identificador'=> $request->get('identificador')
+          ]);
+
+          $teacher->save();
+          return redirect('/teachers')->with('success', 'Professor adicionado com sucesso');
     }
 
     /**
@@ -46,7 +57,7 @@ class TeacherController extends Controller
      */
     public function show(Teacher $teacher)
     {
-        //
+        return View('teachers.show')->with('teacher', $teacher);
     }
 
     /**
@@ -57,7 +68,7 @@ class TeacherController extends Controller
      */
     public function edit(Teacher $teacher)
     {
-        //
+        return view('teachers.edit')->with('teacher', $teacher);
     }
 
     /**
@@ -69,7 +80,11 @@ class TeacherController extends Controller
      */
     public function update(Request $request, Teacher $teacher)
     {
-        //
+        $nt = Teacher::find($teacher->id);
+        $nt->nome = $request->get('nome');
+        $nt->identificador = $request->get('identificador');
+        $nt->save();
+        return redirect('/teachers')->with('success', 'Professor atualizado com sucesso');
     }
 
     /**
@@ -80,6 +95,9 @@ class TeacherController extends Controller
      */
     public function destroy(Teacher $teacher)
     {
-        //
+        $deleted = Teacher::find($teacher->id);
+        $deleted->delete();
+
+        return redirect('/teachers')->with('success', 'Professor excluído com sucesso');
     }
 }
