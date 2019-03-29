@@ -3,8 +3,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 class Work extends Model
 {
-    protected $fillable = ['titulo', 'tema', 'palavras_chaves', 'resumo', 'data_apresentacao'];
-    protected $guarded = ['id','created_at', 'updated_at'];
+    protected $fillable = [
+        'titulo', 'tema', 'palavras_chaves', 'resumo', 'data_apresentacao', 'instituicao_id', 'curso_id', 'professor_id',
+        'aluno1_id', 'aluno2_id', 'tipo_trabalho_id', 'arquivo_id'
+        ];
+    protected $guarded = ['id'];
     protected $table = 'works';
 
     public function institution() {

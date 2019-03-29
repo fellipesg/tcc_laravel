@@ -29,8 +29,6 @@
                             </ul>
                         </div>
                     @endif
-
-
                         <form action="/uploadfile" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">Insira o arquivo

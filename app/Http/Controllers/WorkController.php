@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Work;
+use App\Course;
+use App\Institution;
+use App\Teacher;
+use App\Student;
+use App\TypeWork;
+use App\File;
 use Illuminate\Http\Request;
 
 class WorkController extends Controller
@@ -25,7 +31,19 @@ class WorkController extends Controller
      */
     public function create()
     {
-        //
+        $courses = Course::all();
+        $institutions = Institution::all();
+        $teachers = Teacher::all();
+        $students = Student::all();
+        $worktypes = TypeWork::all();
+        $files = File::all();
+        return View('works.create')
+            ->with('courses', $courses)
+            ->with('institutions', $institutions)
+            ->with('teachers', $teachers)
+            ->with('students', $students)
+            ->with('worktypes', $worktypes)
+            ->with('files', $files);
     }
 
     /**
@@ -36,7 +54,48 @@ class WorkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $f = $_FILES['fileToUpload'];
+        $path = $request->file('fileToUpload')->getRealPath();
+        $file = new File([
+            'filename' => $f['name'],
+            'path'  => $path,
+            'mime'=> $f['type'],
+            'size'=> $f['size'],
+          ]);
+
+        $request->validate([
+            'fileToUpload' => 'required|file|max:1024',
+        ]);
+
+       if($request->fileToUpload->storeAs('logos',$file['filename'])) {
+            $work = new Work([
+                'titulo' => $request->get('titulo'),
+                'tema'=> $request->get('tema'),
+                'palavras_chaves' => $request->get('palavras_chaves'),
+                'resumo' => $request->get('resumo'),
+                'data_apresentacao' => $request->get('data_apresentacao'),
+                'instituicao_id' => $request->get('instituicao_id'),
+                'curso_id' => $request->get('curso_id'),
+                'professor_id' => $request->get('professor_id'),
+                'aluno1_id' => $request->get('aluno1_id'),
+                'aluno2_id' => $request->get('aluno2_id'),
+                'tipo_trabalho_id' => $request->get('tipo_trabalho_id')
+              ]);
+            if($file->save()) {
+                $work->arquivo_id = $file->id;
+                if($work->save()) {
+                    return back()->with('success','Trabalho submetido com sucesso!');
+                } else {
+                    Storage::delete($f->filename);
+                }
+
+            }else {
+                Storage::delete($f->filename);
+            }
+
+       }else {
+            return back()->with('error','Erro ao submeter trabalho!');
+       }
     }
 
     /**
