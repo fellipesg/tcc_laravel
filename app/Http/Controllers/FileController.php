@@ -14,7 +14,8 @@ class FileController extends Controller
      */
     public function index()
     {
-        //
+        $files = File::all();
+        return View('files.index')->with('files', $files);
     }
 
     /**
@@ -24,7 +25,7 @@ class FileController extends Controller
      */
     public function create()
     {
-        //
+        return View('files.create');
     }
 
     /**
@@ -35,7 +36,19 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'titulo' => 'required:max:255',
+            'resumo' => 'required',
+            'price' => 'required|numeric'
+          ]);
+
+          auth()->user()->files()->create([
+            'title' => $request->get('title'),
+            'overview' => $request->get('overview'),
+            'price' => $request->get('price')
+          ]);
+
+          return back()->with('message', 'Your file is submitted Successfully');
     }
 
     /**
@@ -46,9 +59,60 @@ class FileController extends Controller
      */
     public function show(File $file)
     {
-        //
+        return response()->download(storage_path('app/public/logos/' . $file->filename));
     }
+    public function uploadFile(){
+        return view('files.uploadfile');
+    }
+    public function uploadFilePost(Request $request){
 
+        $f = $_FILES['fileToUpload'];
+        $path = $request->file('fileToUpload')->getRealPath();
+        $file = new File([
+            'filename' => $f['name'],
+            'path'  => $path,
+            'mime'=> $f['type'],
+            'size'=> $f['size'],
+          ]);
+
+        $request->validate([
+            'fileToUpload' => 'required|file|max:1024',
+        ]);
+
+       if($request->fileToUpload->storeAs('logos',$file['filename'])) {
+            $file->save();
+
+            return back()
+                ->with('success','You have successfully upload image.');
+       }else {
+            return back()
+                ->with('error','You have not successfully upload image.');
+       }
+
+
+    }
+    public function upload() {
+
+        $uploadedFile = $request->file('file');
+      $filename = time().$uploadedFile->getClientOriginalName();
+
+      Storage::disk('local')->putFileAs(
+        'files/'.$filename,
+        $uploadedFile,
+        $filename
+      );
+
+      $upload = new Upload;
+      $upload->filename = $filename;
+
+      $upload->user()->associate(auth()->user());
+
+      $upload->save();
+
+      return response()->json([
+        'id' => $upload->id
+      ]);
+    }
     /**
      * Show the form for editing the specified resource.
      *

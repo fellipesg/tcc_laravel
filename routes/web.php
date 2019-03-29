@@ -17,6 +17,9 @@ Route::resource('teachers', 'TeacherController');
 Route::resource('students', 'StudentController');
 Route::resource('works', 'WorkController');
 Route::resource('typesworks', 'TypeWorkController');
+Route::post('upload', 'FileController@upload')->name('upload');
+Route::get('uploadfile','FileController@uploadfile');
+Route::post('uploadfile','FileController@uploadFilePost');
 Route::get('/', function () {
     return view('welcome');
 });
