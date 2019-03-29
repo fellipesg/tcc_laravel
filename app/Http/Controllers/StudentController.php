@@ -14,7 +14,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::all();
+        return view('students.index')->with('students', $students);
     }
 
     /**
@@ -24,7 +25,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        return View('students.create');
     }
 
     /**
@@ -35,7 +36,21 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome'=>'required',
+            'sobrenome' => 'required',
+            'email'     => 'required|email',
+            'fone'  =>  'required'
+          ]);
+          $student = new Student([
+            'nome' => $request->get('nome'),
+            'sobrenome'    => $request->get('sobrenome'),
+            'email'        => $request->get('email'),
+            'fone'     => $request->get('fone')
+          ]);
+
+          $student->save();
+          return redirect('/students')->with('success', 'Estudante adicionado com sucesso');
     }
 
     /**
@@ -46,7 +61,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+        return View('students.show')->with('student', $student);
     }
 
     /**
@@ -57,7 +72,7 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        return view('students.edit')->with('student', $student);
     }
 
     /**
@@ -69,7 +84,13 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $ns = Student::find($student->id);
+        $ns->nome = $request->get('nome');
+        $ns->sobrenome = $request->get('sobrenome');
+        $ns->email = $request->get('email');
+        $ns->fone = $request->get('fone');
+        $ns->save();
+        return redirect('/students')->with('success', 'Estudante atualizado com sucesso');
     }
 
     /**
@@ -80,6 +101,9 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $deleted = Student::find($student->id);
+        $deleted->delete();
+
+        return redirect('/students')->with('success', 'Estudante excluído com sucesso');
     }
 }

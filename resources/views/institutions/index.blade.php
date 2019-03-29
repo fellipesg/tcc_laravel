@@ -47,6 +47,7 @@
             </ul>
         </td>
         <td>{{$date}}</td>
+        <td><a href="{{ route('institutions.show', $institution['id'])}}" class="btn btn-success">Visualizar</a></td>
         <td><a href="{{ route('institutions.edit', $institution['id'])}}" class="btn btn-warning">Edit</a></td>
         <td>
           <form action="{{ route('institutions.destroy', $institution['id'])}}" method="post">

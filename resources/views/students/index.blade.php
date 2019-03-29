@@ -23,33 +23,30 @@
       <tr>
         <th>ID</th>
         <th>Nome</th>
-        <th>Identificador</th>
+        <th>Sobrenome</th>
+        <th>Email</th>
+        <th>Telefone</th>
         <th>Criado em</th>
         <th colspan="2" style="display:center;">Actions</th>
       </tr>
     </thead>
     <tbody>
 
-      @foreach($teachers as $teacher)
+      @foreach($students as $student)
       @php
-        $date=date('Y-m-d', $teacher['date']);
+        $date=date('Y-m-d', $student['date']);
         @endphp
       <tr>
-        <td>{{$teacher['id']}}</td>
-        <td>{{$teacher['nome']}}</td>
-        <td>{{$teacher['identificador']}}</td>
-        {{--  <td>
-            <ul>
-                @foreach($institution->courses as $course)
-                    <li>{{ $course->nome }}</li>
-                @endforeach
-            </ul>
-        </td>  --}}
+        <td>{{$student['id']}}</td>
+        <td>{{$student['nome']}}</td>
+        <td>{{$student['sobrenome']}}</td>
+        <td>{{$student['email']}}</td>
+        <td>{{$student['fone']}}</td>
         <td>{{$date}}</td>
-        <td><a href="{{ route('teachers.show', $teacher['id'])}}" class="btn btn-success">Visualizar</a></td>
-        <td><a href="{{ route('teachers.edit', $teacher['id'])}}" class="btn btn-warning">Edit</a></td>
+        <td><a href="{{ route('students.show', $student['id'])}}" class="btn btn-success">Visualizar</a></td>
+        <td><a href="{{ route('students.edit', $student['id'])}}" class="btn btn-warning">Edit</a></td>
         <td>
-          <form action="{{ route('teachers.destroy', $teacher['id'])}}" method="post">
+          <form action="{{ route('students.destroy', $student['id'])}}" method="post">
             @csrf
             <input name="_method" type="hidden" value="DELETE">
             <button class="btn btn-danger" type="submit">Delete</button>

@@ -41,6 +41,7 @@
         <td>{{$course['identificador']}}</td>
         <td>{{$course->institution->nome}}</td>
         <td>{{$date}}</td>
+        <td><a href="{{ route('courses.show', $course['id'])}}" class="btn btn-success">Visualizar</a></td>
         <td><a href="{{ route('courses.edit', $course['id'])}}" class="btn btn-warning">Edit</a></td>
         <td>
           <form action="{{ route('courses.destroy', $course['id'])}}" method="post">
