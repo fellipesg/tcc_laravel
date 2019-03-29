@@ -22,7 +22,16 @@
     @endif
       <form method="post" action="{{ route('courses.store') }}">
           <div class="form-group">
-              @csrf
+            @csrf
+            <label for="name">Instituicao</label><br>
+            <select name="institution_id">
+                <option value="">Selecione</option>
+                @foreach ($institutions as $institution)
+                    <option value="{{ $institution->id }}">{{ $institution->nome }}</option>
+                @endforeach
+            </select>
+          </div>
+          <div class="form-group">
               <label for="name">Nome do Curso:</label>
               <input type="text" class="form-control" name="nome"/>
           </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Course;
+use App\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -15,7 +16,6 @@ class CourseController extends Controller
      */
     public function index()
     {
-
         $courses = Course::all();
         return view('courses.index')->with('courses', $courses);
 
@@ -28,7 +28,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return View('courses.create');
+        $institutions = Institution::all();
+        return View('courses.create')->with('institutions', $institutions);
     }
 
     /**
@@ -41,11 +42,13 @@ class CourseController extends Controller
     {
         $request->validate([
             'nome'=>'required',
-            'identificador'=> 'required'
+            'identificador'=> 'required',
+            'institution_id'=> 'required'
           ]);
           $course = new Course([
             'nome' => $request->get('nome'),
-            'identificador'=> $request->get('identificador')
+            'identificador'=> $request->get('identificador'),
+            'institution_id'=> $request->get('institution_id')
           ]);
 
           $course->save();

@@ -24,6 +24,7 @@
         <th>ID</th>
         <th>Nome</th>
         <th>Identificador</th>
+        <th>Instituição</th>
         <th>Criado em</th>
         <th colspan="2" style="display:center;">Actions</th>
       </tr>
@@ -38,6 +39,7 @@
         <td>{{$course['id']}}</td>
         <td>{{$course['nome']}}</td>
         <td>{{$course['identificador']}}</td>
+        <td>{{$course->institution->nome}}</td>
         <td>{{$date}}</td>
         <td><a href="{{ route('courses.edit', $course['id'])}}" class="btn btn-warning">Edit</a></td>
         <td>
