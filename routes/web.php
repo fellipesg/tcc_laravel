@@ -16,7 +16,7 @@ Route::resource('institutions', 'InstitutionController');
 Route::resource('teachers', 'TeacherController');
 Route::resource('students', 'StudentController');
 Route::resource('works', 'WorkController');
-Route::resource('types', 'TypeController');
+Route::resource('typesworks', 'TypeWorkController');
 Route::get('/', function () {
     return view('welcome');
 });

@@ -14,7 +14,8 @@ class TypeWorkController extends Controller
      */
     public function index()
     {
-        //
+        $types = TypeWork::all();
+        return view('typeworks.index')->with('typeworks', $types);
     }
 
     /**
@@ -24,7 +25,7 @@ class TypeWorkController extends Controller
      */
     public function create()
     {
-        //
+        return View('typeworks.create');
     }
 
     /**
@@ -35,7 +36,17 @@ class TypeWorkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome_tipo'=>'required',
+            'identificador'=> 'required'
+          ]);
+          $typework = new TypeWork([
+            'nome_tipo' => $request->get('nome_tipo'),
+            'identificador'=> $request->get('identificador')
+          ]);
+
+          $typework->save();
+          return redirect('/typesworks')->with('success', 'Tipo de Trabalho adicionado com sucesso');
     }
 
     /**
@@ -44,9 +55,10 @@ class TypeWorkController extends Controller
      * @param  \App\TypeWork  $typeWork
      * @return \Illuminate\Http\Response
      */
-    public function show(TypeWork $typeWork)
+    public function show($typeWork)
     {
-        //
+        $type = TypeWork::find($typeWork);
+        return View('typeworks.show')->with('typework', $type);
     }
 
     /**
@@ -55,9 +67,10 @@ class TypeWorkController extends Controller
      * @param  \App\TypeWork  $typeWork
      * @return \Illuminate\Http\Response
      */
-    public function edit(TypeWork $typeWork)
+    public function edit($typeWork)
     {
-        //
+        $type = TypeWork::find($typeWork);
+        return view('typeworks.edit')->with('typework', $type);
     }
 
     /**
@@ -67,9 +80,13 @@ class TypeWorkController extends Controller
      * @param  \App\TypeWork  $typeWork
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TypeWork $typeWork)
+    public function update(Request $request, $typeWork)
     {
-        //
+        $nt = TypeWork::find($typeWork);
+        $nt->nome_tipo = $request->get('nome_tipo');
+        $nt->identificador = $request->get('identificador');
+        $nt->save();
+        return redirect('/typesworks')->with('success', 'Tipo de Trabalho atualizado com sucesso');
     }
 
     /**
@@ -78,8 +95,11 @@ class TypeWorkController extends Controller
      * @param  \App\TypeWork  $typeWork
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TypeWork $typeWork)
+    public function destroy($typeWork)
     {
-        //
+        $deleted = TypeWork::find($typeWork);
+        $deleted->delete();
+
+        return redirect('/typesworks')->with('success', 'Tipo de Trabalho excluído com sucesso');
     }
 }
